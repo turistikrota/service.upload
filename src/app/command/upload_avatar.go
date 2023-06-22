@@ -12,7 +12,6 @@ import (
 
 type UploadAvatarCommand struct {
 	UserName string
-	UserCode string
 	Content  *multipart.FileHeader
 }
 
@@ -45,7 +44,7 @@ func NewUploadAvatarHandler(config UploadAvatarHandlerConfig) UploadAvatarHandle
 
 func (h uploadAvatarHandler) Handle(ctx context.Context, command UploadAvatarCommand) (*UploadAvatarResult, *i18np.Error) {
 	dir := "avatar"
-	name := fmt.Sprintf("%s-%s", command.UserName, command.UserCode)
+	name := fmt.Sprintf("@%s", command.UserName)
 	bytes, err := h.factory.New(cdn.ValidateConfig{
 		Content: command.Content,
 		Accept:  []string{"image/png"},

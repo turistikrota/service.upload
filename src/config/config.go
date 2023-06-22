@@ -81,6 +81,11 @@ type R2 struct {
 	PublicHost string `env:"R2_PUBLIC_HOST"`
 }
 
+type RSA struct {
+	PrivateKeyFile string `env:"RSA_PRIVATE_KEY"`
+	PublicKeyFile  string `env:"RSA_PUBLIC_KEY"`
+}
+
 type App struct {
 	Protocol    string `env:"PROTOCOL" envDefault:"http"`
 	MySQLEmpty  MySQLEmpty
@@ -95,4 +100,5 @@ type App struct {
 	TokenSrv    TokenSrv
 	CDN         CDN
 	R2          R2
+	RSA         RSA
 }

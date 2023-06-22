@@ -51,6 +51,7 @@ func New(config Config) Server {
 }
 
 func (h Server) Load(router fiber.Router) fiber.Router {
+	router.Post("/test/@:userName", h.wrapWithTimeout(h.UploadAvatar))
 	router.Use(h.cors(), h.deviceUUID(), h.rateLimit(), h.currentUserAccess(), h.requiredAccess())
 	router.Post("/image", h.isUploadAdminRole(Fields.Image), h.wrapWithTimeout(h.UploadImage))
 	router.Post("/pdf", h.isUploadAdminRole(Fields.Pdf), h.wrapWithTimeout(h.UploadPdf))
