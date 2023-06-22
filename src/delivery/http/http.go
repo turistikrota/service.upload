@@ -3,15 +3,6 @@ package http
 import (
 	"time"
 
-	"api.turistikrota.com/shared/auth/session"
-	"api.turistikrota.com/shared/auth/token"
-	"api.turistikrota.com/shared/server/http"
-	"api.turistikrota.com/shared/server/http/auth"
-	"api.turistikrota.com/shared/server/http/auth/current_account"
-	"api.turistikrota.com/shared/server/http/auth/current_user"
-	"api.turistikrota.com/shared/server/http/auth/device_uuid"
-	"api.turistikrota.com/shared/server/http/auth/required_access"
-	"api.turistikrota.com/shared/validator"
 	"api.turistikrota.com/upload/src/app"
 	"api.turistikrota.com/upload/src/config"
 	"github.com/gofiber/fiber/v2"
@@ -19,6 +10,15 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/timeout"
 	"github.com/mixarchitecture/i18np"
+	"github.com/turistikrota/service.shared/auth/session"
+	"github.com/turistikrota/service.shared/auth/token"
+	"github.com/turistikrota/service.shared/server/http"
+	"github.com/turistikrota/service.shared/server/http/auth"
+	"github.com/turistikrota/service.shared/server/http/auth/current_account"
+	"github.com/turistikrota/service.shared/server/http/auth/current_user"
+	"github.com/turistikrota/service.shared/server/http/auth/device_uuid"
+	"github.com/turistikrota/service.shared/server/http/auth/required_access"
+	"github.com/turistikrota/service.shared/validator"
 )
 
 type Server struct {
@@ -68,9 +68,9 @@ func (h Server) deviceUUID() fiber.Handler {
 
 func (h Server) currentAccount() fiber.Handler {
 	return current_account.New(current_account.Config{
-		FieldName: "userName",
-		I18n: 	&h.i18n,
-		RequiredKey: Messages.Error.RequiredAuth,
+		FieldName:    "userName",
+		I18n:         &h.i18n,
+		RequiredKey:  Messages.Error.RequiredAuth,
 		ForbiddenKey: Messages.Error.Forbidden,
 	})
 }

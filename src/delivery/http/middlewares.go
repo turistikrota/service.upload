@@ -3,10 +3,10 @@ package http
 import (
 	"fmt"
 
-	"api.turistikrota.com/shared/server/http/auth/claim_guard"
-	"api.turistikrota.com/shared/server/http/auth/current_user"
 	"api.turistikrota.com/upload/src/config"
 	"github.com/gofiber/fiber/v2"
+	"github.com/turistikrota/service.shared/server/http/auth/claim_guard"
+	"github.com/turistikrota/service.shared/server/http/auth/current_user"
 )
 
 func (h Server) isUploadAdminRole(field string) fiber.Handler {

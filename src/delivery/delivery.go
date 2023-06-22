@@ -1,15 +1,15 @@
 package delivery
 
 import (
-	"api.turistikrota.com/shared/auth/session"
-	"api.turistikrota.com/shared/auth/token"
-	sharedHttp "api.turistikrota.com/shared/server/http"
-	"api.turistikrota.com/shared/validator"
 	"api.turistikrota.com/upload/src/app"
 	"api.turistikrota.com/upload/src/config"
 	"api.turistikrota.com/upload/src/delivery/http"
 	"github.com/gofiber/fiber/v2"
 	"github.com/mixarchitecture/i18np"
+	"github.com/turistikrota/service.shared/auth/session"
+	"github.com/turistikrota/service.shared/auth/token"
+	sharedHttp "github.com/turistikrota/service.shared/server/http"
+	"github.com/turistikrota/service.shared/validator"
 )
 
 type Delivery interface {

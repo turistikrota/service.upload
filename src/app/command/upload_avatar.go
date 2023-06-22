@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"mime/multipart"
 
-	"api.turistikrota.com/shared/decorator"
 	"api.turistikrota.com/upload/src/domain/cdn"
 	"github.com/mixarchitecture/i18np"
+	"github.com/turistikrota/service.shared/decorator"
 )
 
 type UploadAvatarCommand struct {

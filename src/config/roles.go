@@ -1,6 +1,6 @@
 package config
 
-import "api.turistikrota.com/shared/base_roles"
+import "github.com/turistikrota/service.shared/base_roles"
 
 type cdnRoles struct {
 	Upload string

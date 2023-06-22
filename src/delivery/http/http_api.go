@@ -3,12 +3,12 @@ package http
 import (
 	"mime/multipart"
 
-	"api.turistikrota.com/shared/server/http/auth/current_account"
-	httpI18n "api.turistikrota.com/shared/server/http/i18n"
-	"api.turistikrota.com/shared/server/http/result"
 	"api.turistikrota.com/upload/src/app/command"
 	"api.turistikrota.com/upload/src/delivery/http/dto"
 	"github.com/gofiber/fiber/v2"
+	"github.com/turistikrota/service.shared/server/http/auth/current_account"
+	httpI18n "github.com/turistikrota/service.shared/server/http/i18n"
+	"github.com/turistikrota/service.shared/server/http/result"
 )
 
 type fileRequest struct {
@@ -92,11 +92,10 @@ func (h Server) UploadAvatar(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	name, code := current_account.Parse(ctx)
+	name := current_account.Parse(ctx)
 	res, error := h.app.Commands.UploadAvatar.Handle(ctx.UserContext(), command.UploadAvatarCommand{
 		Content:  avatar,
 		UserName: name,
-		UserCode: code,
 	})
 	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.AvatarUploaded, func() interface{} {
 		return dto.Response.AvatarUploaded(res)
@@ -129,4 +128,4 @@ func (h Server) validateAvatar(ctx *fiber.Ctx) (*multipart.FileHeader, error) {
 		return nil, result.Error(h.i18n.Translate(Messages.Error.AvatarNotFound, l, a))
 	}
 	return image, nil
-} 
+}

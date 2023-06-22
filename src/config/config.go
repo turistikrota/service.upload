@@ -73,6 +73,14 @@ type CDN struct {
 	ApiKey      string `env:"CDN_API_KEY"`
 }
 
+type R2 struct {
+	AccountId  string `env:"R2_ACCOUNT_ID"`
+	AccessKey  string `env:"R2_ACCESS_KEY"`
+	SecretKey  string `env:"R2_SECRET_KEY"`
+	Bucket     string `env:"R2_BUCKET"`
+	PublicHost string `env:"R2_PUBLIC_HOST"`
+}
+
 type App struct {
 	Protocol    string `env:"PROTOCOL" envDefault:"http"`
 	MySQLEmpty  MySQLEmpty
@@ -86,4 +94,5 @@ type App struct {
 	Redis       Redis
 	TokenSrv    TokenSrv
 	CDN         CDN
+	R2          R2
 }
