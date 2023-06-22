@@ -66,7 +66,3 @@ func (r *repo) makeUrl(filename string, path string) string {
 func (r *repo) makeUploadedUrl(filename string, path string) string {
 	return fmt.Sprintf("%s/%s/%s", r.config.PublicHost, path, filename)
 }
-
-// 1f5d3866562e9650cc4da9557aacc24f accountid
-// 2bc7697469760ccbd5f6e3a147f4d3b8 access key id
-// d126eb10512ac98c94d47cab5bbcadc98ab169f81437de53e2e1978246a248ce secret key
