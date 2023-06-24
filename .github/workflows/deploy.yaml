@@ -37,4 +37,4 @@ jobs:
             git pull origin main
             docker build --build-arg GITHUB_TOKEN=$TOKEN --build-arg GITHUB_USER=$USER -t $IMAGE_NAME .
             docker service rm $CONTAINER_NAME
-            docker service create --name $CONTAINER_NAME --network $NETWORK_NAME --secret $SECRET_NAME_1 --secret $SECRET_NAME_2 --env-file .env --host $HOST_ALIAS:$HOST_IP --host $REDIS_HOST_ALIAS:$HOST_IP --publish $APP_PORT:$APP_PORT $IMAGE_NAME
+            docker service create --name $CONTAINER_NAME --network $NETWORK_NAME --secret $SECRET_NAME_1 --secret $SECRET_NAME_2 --env-file .env --host $REDIS_HOST_ALIAS:$HOST_IP --publish $APP_PORT:$APP_PORT $IMAGE_NAME
