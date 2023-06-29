@@ -6,6 +6,7 @@ import (
 	"api.turistikrota.com/upload/src/app/command"
 	"api.turistikrota.com/upload/src/delivery/http/dto"
 	"github.com/gofiber/fiber/v2"
+	"github.com/turistikrota/service.shared/server/http/auth/current_account"
 	httpI18n "github.com/turistikrota/service.shared/server/http/i18n"
 	"github.com/turistikrota/service.shared/server/http/result"
 )
@@ -91,8 +92,7 @@ func (h Server) UploadAvatar(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	// name := current_account.Parse(ctx)
-	name := "ssi"
+	name := current_account.Parse(ctx)
 	res, error := h.app.Commands.UploadAvatar.Handle(ctx.UserContext(), command.UploadAvatarCommand{
 		Content:  avatar,
 		UserName: name,
