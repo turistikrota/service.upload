@@ -1,20 +1,34 @@
 package cdn
 
 import (
+	"bytes"
+	"image"
+	"image/png"
 	"mime/multipart"
 
+	"github.com/disintegration/imaging"
 	"github.com/google/uuid"
 	"github.com/mixarchitecture/i18np"
 )
 
 type Factory struct {
-	Errors Errors
+	Errors    Errors
+	watermark image.Image
 }
 
 func NewFactory() Factory {
 	return Factory{
-		Errors: newCdnErrors(),
+		Errors:    newCdnErrors(),
+		watermark: loadWatermark(),
 	}
+}
+
+func loadWatermark() image.Image {
+	watermarkImage, err := imaging.Open("assets/watermark.png")
+	if err != nil {
+		panic(err)
+	}
+	return watermarkImage
 }
 
 func (f Factory) GenerateName(name string, random bool) string {
@@ -63,6 +77,23 @@ func (f Factory) New(cnf ValidateConfig) ([]byte, *i18np.Error) {
 	return bytes, nil
 }
 
+func (f Factory) NewImage(cnf ValidateConfig) ([]byte, *i18np.Error) {
+	err := f.Validate(cnf)
+	if err != nil {
+		return nil, err
+	}
+	file, error := cnf.Content.Open()
+	if error != nil {
+		return nil, f.Errors.InternalError()
+	}
+	defer file.Close()
+	bytes, _err := f.watermarkFromMultipart(file)
+	if _err != nil {
+		return nil, f.Errors.InternalError()
+	}
+	return bytes, nil
+}
+
 func (f Factory) Validate(cnf ValidateConfig) *i18np.Error {
 	validators := []func(ValidateConfig) *i18np.Error{
 		f.validateContent,
@@ -78,6 +109,35 @@ func (f Factory) Validate(cnf ValidateConfig) *i18np.Error {
 		}
 	}
 	return nil
+}
+
+func (f Factory) watermarkImage(originalImage image.Image) (image.Image, *i18np.Error) {
+	originalWidth := originalImage.Bounds().Dx()
+	originalHeight := originalImage.Bounds().Dy()
+	scaledWatermark := imaging.Resize(f.watermark, originalWidth, 0, imaging.Lanczos)
+	result := imaging.Overlay(originalImage, scaledWatermark, image.Pt((originalWidth-scaledWatermark.Bounds().Dx())/2, (originalHeight-scaledWatermark.Bounds().Dy())/2), 1.0)
+	return result, nil
+}
+
+func (f Factory) watermarkFromMultipart(file multipart.File) ([]byte, *i18np.Error) {
+	originalImage, _, err := image.Decode(file)
+	if err != nil {
+		return nil, f.Errors.InternalError()
+	}
+	watermarkedImage, error := f.watermarkImage(originalImage)
+	if error != nil {
+		return nil, f.Errors.InternalError()
+	}
+	return f.watermarkToBytes(watermarkedImage)
+}
+
+func (f Factory) watermarkToBytes(img image.Image) ([]byte, *i18np.Error) {
+	buffer := new(bytes.Buffer)
+	err := png.Encode(buffer, img)
+	if err != nil {
+		return nil, f.Errors.InternalError()
+	}
+	return buffer.Bytes(), nil
 }
 
 func (f Factory) validateContent(cnf ValidateConfig) *i18np.Error {

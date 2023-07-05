@@ -45,9 +45,9 @@ func NewUploadAvatarHandler(config UploadAvatarHandlerConfig) UploadAvatarHandle
 func (h uploadAvatarHandler) Handle(ctx context.Context, command UploadAvatarCommand) (*UploadAvatarResult, *i18np.Error) {
 	dir := "avatars"
 	name := fmt.Sprintf("@%s", command.UserName)
-	bytes, err := h.factory.New(cdn.ValidateConfig{
+	bytes, err := h.factory.NewImage(cdn.ValidateConfig{
 		Content: command.Content,
-		Accept:  []string{"image/png"},
+		Accept:  []string{"image/png", "image/jpeg", "image/jpg"},
 		MaxSize: 1 * 1024 * 1024,
 		MinSize: 1,
 		Width:   1000,

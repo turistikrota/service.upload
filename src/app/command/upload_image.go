@@ -47,7 +47,7 @@ func NewUploadImageHandler(config UploadImageHandlerConfig) UploadImageHandler {
 func (h uploadImageHandler) Handle(ctx context.Context, command UploadImageCommand) (*UploadImageResult, *i18np.Error) {
 	dir := h.factory.GenerateDirName(command.Dir, command.IsAdmin, "img")
 	name := h.factory.GenerateName(command.FileName, command.RandomName)
-	bytes, err := h.factory.New(cdn.ValidateConfig{
+	bytes, err := h.factory.NewImage(cdn.ValidateConfig{
 		Content: command.Content,
 		Accept:  []string{"image/jpeg", "image/jpg", "image/png", "image/gif"},
 		MaxSize: 5 * 1024 * 1024,
