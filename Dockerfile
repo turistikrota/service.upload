@@ -23,6 +23,7 @@ ENV PORT 8080
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /main .
 COPY --from=builder /src/locales ./src/locales
+COPY --from=builder /assets ./assets
 
 EXPOSE $PORT
 
