@@ -56,7 +56,7 @@ func (h uploadAvatarHandler) Handle(ctx context.Context, command UploadAvatarCom
 	if err != nil {
 		return nil, err
 	}
-	fullName := name + "." + h.factory.GetExtension(command.Content)
+	fullName := name + ".png"
 	url, success := h.repo.Upload(bytes, fullName, dir)
 	if !success {
 		return nil, h.factory.Errors.InternalError()
