@@ -3,12 +3,12 @@ package http
 import (
 	"mime/multipart"
 
-	"api.turistikrota.com/upload/src/app/command"
-	"api.turistikrota.com/upload/src/delivery/http/dto"
 	"github.com/gofiber/fiber/v2"
+	httpI18n "github.com/mixarchitecture/microp/server/http/i18n"
+	"github.com/mixarchitecture/microp/server/http/result"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
-	httpI18n "github.com/turistikrota/service.shared/server/http/i18n"
-	"github.com/turistikrota/service.shared/server/http/result"
+	"github.com/turistikrota/service.upload/src/app/command"
+	"github.com/turistikrota/service.upload/src/delivery/http/dto"
 )
 
 type fileRequest struct {

@@ -1,15 +1,15 @@
 package delivery
 
 import (
-	"api.turistikrota.com/upload/src/app"
-	"api.turistikrota.com/upload/src/config"
-	"api.turistikrota.com/upload/src/delivery/http"
 	"github.com/gofiber/fiber/v2"
 	"github.com/mixarchitecture/i18np"
+	sharedHttp "github.com/mixarchitecture/microp/server/http"
+	"github.com/mixarchitecture/microp/validator"
 	"github.com/turistikrota/service.shared/auth/session"
 	"github.com/turistikrota/service.shared/auth/token"
-	sharedHttp "github.com/turistikrota/service.shared/server/http"
-	"github.com/turistikrota/service.shared/validator"
+	"github.com/turistikrota/service.upload/src/app"
+	"github.com/turistikrota/service.upload/src/config"
+	"github.com/turistikrota/service.upload/src/delivery/http"
 )
 
 type Delivery interface {

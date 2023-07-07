@@ -1,4 +1,4 @@
-module api.turistikrota.com/upload
+module github.com/turistikrota/service.upload
 
 go 1.20
 
@@ -7,8 +7,9 @@ require (
 	github.com/gofiber/fiber/v2 v2.47.0
 	github.com/google/uuid v1.3.0
 	github.com/mixarchitecture/i18np v0.0.0-20230331235711-ece4c5f1bb52
+	github.com/mixarchitecture/microp v0.0.1
 	github.com/sirupsen/logrus v1.9.3
-	github.com/turistikrota/service.shared v0.0.18
+	github.com/turistikrota/service.shared v0.0.24
 )
 
 require (
