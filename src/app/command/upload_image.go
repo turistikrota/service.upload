@@ -4,9 +4,9 @@ import (
 	"context"
 	"mime/multipart"
 
-	"api.turistikrota.com/upload/src/domain/cdn"
 	"github.com/mixarchitecture/i18np"
-	"github.com/turistikrota/service.shared/decorator"
+	"github.com/mixarchitecture/microp/decorator"
+	"github.com/turistikrota/service.upload/src/domain/cdn"
 )
 
 type UploadImageCommand struct {

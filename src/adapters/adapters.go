@@ -1,8 +1,8 @@
 package adapters
 
 import (
-	"api.turistikrota.com/upload/src/adapters/mongo"
-	"api.turistikrota.com/upload/src/adapters/mysql"
+	"github.com/turistikrota/service.upload/src/adapters/mongo"
+	"github.com/turistikrota/service.upload/src/adapters/mysql"
 )
 
 var (

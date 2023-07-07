@@ -1,6 +1,6 @@
 package res
 
-import "api.turistikrota.com/upload/src/app/command"
+import "github.com/turistikrota/service.upload/src/app/command"
 
 type Response interface {
 	ImageUploaded(res *command.UploadImageResult) *FileUploadedResponse

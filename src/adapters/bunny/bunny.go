@@ -7,8 +7,8 @@ import (
 	"io"
 	"net/http"
 
-	"api.turistikrota.com/upload/src/domain/cdn"
 	"github.com/sirupsen/logrus"
+	"github.com/turistikrota/service.upload/src/domain/cdn"
 )
 
 type repo struct {

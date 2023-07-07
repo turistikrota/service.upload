@@ -1,18 +1,18 @@
 package main
 
 import (
+	"github.com/mixarchitecture/microp/events/nats"
+	"github.com/mixarchitecture/microp/validator"
 	"github.com/turistikrota/service.shared/auth/session"
 	"github.com/turistikrota/service.shared/auth/token"
 	"github.com/turistikrota/service.shared/db/redis"
-	"github.com/turistikrota/service.shared/events/nats"
-	"github.com/turistikrota/service.shared/validator"
 
-	"api.turistikrota.com/upload/src/config"
-	"api.turistikrota.com/upload/src/delivery"
-	"api.turistikrota.com/upload/src/service"
 	"github.com/mixarchitecture/i18np"
-	"github.com/turistikrota/service.shared/env"
-	"github.com/turistikrota/service.shared/logs"
+	"github.com/mixarchitecture/microp/env"
+	"github.com/mixarchitecture/microp/logs"
+	"github.com/turistikrota/service.upload/src/config"
+	"github.com/turistikrota/service.upload/src/delivery"
+	"github.com/turistikrota/service.upload/src/service"
 )
 
 func main() {
