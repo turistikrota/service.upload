@@ -194,6 +194,10 @@ func (f Factory) GetExtension(content *multipart.FileHeader) string {
 		return "png"
 	case "image/gif":
 		return "gif"
+	case "text/markdown":
+		return "md"
+	case "text/plain":
+		return "txt"
 	default:
 		return ""
 	}
