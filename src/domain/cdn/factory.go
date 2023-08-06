@@ -9,6 +9,7 @@ import (
 	"github.com/disintegration/imaging"
 	"github.com/google/uuid"
 	"github.com/mixarchitecture/i18np"
+	"github.com/nfnt/resize"
 )
 
 type Factory struct {
@@ -119,6 +120,28 @@ func (f Factory) watermarkImage(originalImage image.Image) (image.Image, *i18np.
 	return result, nil
 }
 
+func (f Factory) minifyImage(originalImage image.Image) image.Image {
+	const maxWidth = 1920
+	const maxHeight = 1080
+	width := originalImage.Bounds().Dx()
+	height := originalImage.Bounds().Dy()
+	maxSizeInBytes := int64(0.5 * 1024 * 1024) // 0.5 MB
+
+	if int64(width*height*3) <= maxSizeInBytes {
+		return originalImage
+	}
+
+	resizedImage := resize.Resize(uint(maxWidth), uint(maxHeight), originalImage, resize.Lanczos3)
+
+	for int64(resizedImage.Bounds().Dx()*resizedImage.Bounds().Dy()*3) > maxSizeInBytes {
+		resizedImage = resize.Resize(uint(width/2), uint(height/2), resizedImage, resize.Lanczos3)
+		width = width / 2
+		height = height / 2
+	}
+
+	return resizedImage
+}
+
 func (f Factory) watermarkFromMultipart(file multipart.File) ([]byte, *i18np.Error) {
 	originalImage, _, err := image.Decode(file)
 	if err != nil {
@@ -128,6 +151,7 @@ func (f Factory) watermarkFromMultipart(file multipart.File) ([]byte, *i18np.Err
 	if error != nil {
 		return nil, f.Errors.InternalError()
 	}
+	watermarkedImage = f.minifyImage(watermarkedImage)
 	return f.watermarkToBytes(watermarkedImage)
 }
 
