@@ -58,7 +58,7 @@ func (h uploadImageHandler) Handle(ctx context.Context, command UploadImageComma
 	if err != nil {
 		return nil, err
 	}
-	fullName := name + "." + h.factory.GetExtension(command.Content)
+	fullName := name + ".webp"
 	url, success := h.repo.Upload(bytes, fullName, dir)
 	if !success {
 		return nil, h.factory.Errors.InternalError()
