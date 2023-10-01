@@ -13,7 +13,7 @@ func (h Server) isUploadAdminRole(field string) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		u := current_user.Parse(ctx)
 		role := fmt.Sprintf("%s.%s", config.Roles.Cdn.Upload, field)
-		if u != nil && claim_guard.CheckClaim(u, role) {
+		if u != nil && (claim_guard.CheckClaim(u, role) || claim_guard.CheckClaim(u, config.Roles.Admin)) {
 			ctx.Locals(field, "true")
 		}
 		return ctx.Next()
