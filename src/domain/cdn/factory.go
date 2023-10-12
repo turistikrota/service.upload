@@ -194,7 +194,7 @@ func (f Factory) validateSize(cnf ValidateConfig) *i18np.Error {
 		return nil
 	}
 	if cnf.Content.Size < cnf.MinSize {
-		return f.Errors.SizeTooSmall(cnf.MinSize)
+		//	return f.Errors.SizeTooSmall(cnf.MinSize)
 	}
 	return nil
 }
