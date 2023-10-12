@@ -180,7 +180,7 @@ func (f Factory) validateAccept(cnf ValidateConfig) *i18np.Error {
 			return nil
 		}
 	}
-	return f.Errors.TypeNotAccepted(cnf.Accept)
+	return f.Errors.TypeNotAccepted(cnf.Accept, cnf.Content.Header.Get("Content-Type"))
 }
 
 func (f Factory) validateSize(cnf ValidateConfig) *i18np.Error {

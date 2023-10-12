@@ -9,7 +9,7 @@ import (
 type Errors interface {
 	InternalError() *i18np.Error
 	ContentRequired() *i18np.Error
-	TypeNotAccepted([]string) *i18np.Error
+	TypeNotAccepted([]string, string) *i18np.Error
 	SizeTooBig(int64) *i18np.Error
 	SizeTooSmall(int64) *i18np.Error
 }
@@ -28,10 +28,11 @@ func (e *cdnErrors) ContentRequired() *i18np.Error {
 	return i18np.NewError(I18nMessages.ContentRequired)
 }
 
-func (e *cdnErrors) TypeNotAccepted(accepts []string) *i18np.Error {
+func (e *cdnErrors) TypeNotAccepted(accepts []string, fileType string) *i18np.Error {
 	acc := strings.Join(accepts, ", ")
 	return i18np.NewError(I18nMessages.TypeNotAccepted, i18np.P{
 		"Accept": acc,
+		"Type":   fileType,
 	})
 }
 
