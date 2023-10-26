@@ -17,6 +17,15 @@ type Factory struct {
 	watermark image.Image
 }
 
+type MinifyLevel float32
+
+const (
+	MinifyLevelNone   MinifyLevel = iota
+	MinifyLevelLow    MinifyLevel = 2   // 2 MB
+	MinifyLevelMedium MinifyLevel = 1   // 1 MB
+	MinifyLevelHigh   MinifyLevel = 0.5 // 0.5 MB
+)
+
 func NewFactory() Factory {
 	return Factory{
 		Errors:    newCdnErrors(),
@@ -51,16 +60,17 @@ func (f Factory) RandomName() string {
 }
 
 type ValidateConfig struct {
-	Content   *multipart.FileHeader
-	Accept    []string
-	MaxSize   int64
-	MinSize   int64
-	Width     int
-	MinWidth  int
-	MaxWidth  int
-	Height    int
-	MinHeight int
-	MaxHeight int
+	Content     *multipart.FileHeader
+	Accept      []string
+	MaxSize     int64
+	MinSize     int64
+	Width       int
+	MinWidth    int
+	MaxWidth    int
+	Height      int
+	MinHeight   int
+	MaxHeight   int
+	MinifyLevel MinifyLevel
 }
 
 func (f Factory) New(cnf ValidateConfig) ([]byte, *i18np.Error) {
@@ -88,7 +98,7 @@ func (f Factory) NewImage(cnf ValidateConfig) ([]byte, *i18np.Error) {
 		return nil, f.Errors.InternalError()
 	}
 	defer file.Close()
-	bytes, _err := f.watermarkFromMultipart(file)
+	bytes, _err := f.watermarkFromMultipart(file, cnf.MinifyLevel)
 	if _err != nil {
 		return nil, f.Errors.InternalError()
 	}
@@ -120,12 +130,12 @@ func (f Factory) watermarkImage(originalImage image.Image) (image.Image, *i18np.
 	return result, nil
 }
 
-func (f Factory) minifyImage(originalImage image.Image) image.Image {
+func (f Factory) minifyImage(originalImage image.Image, level MinifyLevel) image.Image {
 	const maxWidth = 1920
 	const maxHeight = 1080
 	width := originalImage.Bounds().Dx()
 	height := originalImage.Bounds().Dy()
-	maxSizeInBytes := int64(0.5 * 1024 * 1024) // 0.5 MB
+	maxSizeInBytes := int64(level * 1024 * 1024) // level * 1 MB
 
 	if int64(width*height*3) <= maxSizeInBytes {
 		return originalImage
@@ -142,7 +152,7 @@ func (f Factory) minifyImage(originalImage image.Image) image.Image {
 	return resizedImage
 }
 
-func (f Factory) watermarkFromMultipart(file multipart.File) ([]byte, *i18np.Error) {
+func (f Factory) watermarkFromMultipart(file multipart.File, level MinifyLevel) ([]byte, *i18np.Error) {
 	originalImage, _, err := image.Decode(file)
 	if err != nil {
 		return nil, f.Errors.InternalError()
@@ -151,7 +161,7 @@ func (f Factory) watermarkFromMultipart(file multipart.File) ([]byte, *i18np.Err
 	if error != nil {
 		return nil, f.Errors.InternalError()
 	}
-	watermarkedImage = f.minifyImage(watermarkedImage)
+	watermarkedImage = f.minifyImage(watermarkedImage, level)
 	return f.watermarkToBytes(watermarkedImage)
 }
 
@@ -187,7 +197,7 @@ func (f Factory) validateSize(cnf ValidateConfig) *i18np.Error {
 	if cnf.MaxSize == 0 {
 		return nil
 	}
-	if cnf.Content.Size > cnf.MaxSize {
+	if cnf.MinifyLevel != MinifyLevelNone && cnf.Content.Size > cnf.MaxSize {
 		return f.Errors.SizeTooBig(cnf.MaxSize)
 	}
 	if cnf.MinSize == 0 {

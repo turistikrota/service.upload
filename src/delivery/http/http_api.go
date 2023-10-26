@@ -9,14 +9,16 @@ import (
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
 	"github.com/turistikrota/service.upload/src/app/command"
 	"github.com/turistikrota/service.upload/src/delivery/http/dto"
+	"github.com/turistikrota/service.upload/src/domain/cdn"
 )
 
 type fileRequest struct {
-	FileName   string
-	DirName    string
-	RandomName bool
-	IsAdmin    bool
-	Content    *multipart.FileHeader
+	FileName    string
+	DirName     string
+	RandomName  bool
+	IsAdmin     bool
+	MinifyLevel cdn.MinifyLevel
+	Content     *multipart.FileHeader
 }
 
 func (h Server) UploadImage(ctx *fiber.Ctx) error {
@@ -25,11 +27,12 @@ func (h Server) UploadImage(ctx *fiber.Ctx) error {
 		return err
 	}
 	res, error := h.app.Commands.UploadImage.Handle(ctx.UserContext(), command.UploadImageCommand{
-		RandomName: file.RandomName,
-		Content:    file.Content,
-		IsAdmin:    file.IsAdmin,
-		FileName:   file.FileName,
-		Dir:        file.DirName,
+		RandomName:  file.RandomName,
+		Content:     file.Content,
+		IsAdmin:     file.IsAdmin,
+		FileName:    file.FileName,
+		Dir:         file.DirName,
+		MinifyLevel: file.MinifyLevel,
 	})
 	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.ImageUploaded, func() interface{} {
 		return dto.Response.ImageUploaded(res)
@@ -111,13 +114,23 @@ func (h Server) validateAdmin(ctx *fiber.Ctx, field string, errorMsg string) (*f
 	fileName := ctx.FormValue("fileName", "")
 	dirName := ctx.FormValue("dirName", "")
 	randomName := ctx.FormValue("randomName", "true")
+	minifyLevel := ctx.FormValue("minifyLevel", "0")
+	level := cdn.MinifyLevelHigh
+	if minifyLevel == "medium" {
+		level = cdn.MinifyLevelMedium
+	} else if minifyLevel == "low" {
+		level = cdn.MinifyLevelLow
+	} else if minifyLevel == "none" {
+		level = cdn.MinifyLevelNone
+	}
 	u := ctx.Locals(field)
 	return &fileRequest{
-		FileName:   fileName,
-		DirName:    dirName,
-		RandomName: randomName == "true",
-		IsAdmin:    u != nil && u.(string) == "true",
-		Content:    image,
+		FileName:    fileName,
+		DirName:     dirName,
+		RandomName:  randomName == "true",
+		IsAdmin:     u != nil && u.(string) == "true",
+		Content:     image,
+		MinifyLevel: level,
 	}, nil
 }
 

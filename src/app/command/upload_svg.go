@@ -48,12 +48,13 @@ func (h uploadSvgHandler) Handle(ctx context.Context, command UploadSvgCommand) 
 	dir := h.factory.GenerateDirName(command.Dir, command.IsAdmin, "svg")
 	name := h.factory.GenerateName(command.FileName, command.RandomName)
 	bytes, err := h.factory.New(cdn.ValidateConfig{
-		Content: command.Content,
-		Accept:  []string{"image/svg+xml"},
-		MaxSize: 5 * 1024 * 1024,
-		MinSize: 1,
-		Width:   1000,
-		Height:  1000,
+		Content:     command.Content,
+		Accept:      []string{"image/svg+xml"},
+		MaxSize:     5 * 1024 * 1024,
+		MinSize:     1,
+		Width:       1000,
+		Height:      1000,
+		MinifyLevel: cdn.MinifyLevelMedium,
 	})
 	if err != nil {
 		return nil, err
