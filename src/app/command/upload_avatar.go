@@ -46,12 +46,13 @@ func (h uploadAvatarHandler) Handle(ctx context.Context, command UploadAvatarCom
 	dir := "avatars"
 	name := fmt.Sprintf("@%s", command.UserName)
 	bytes, err := h.factory.NewImage(cdn.ValidateConfig{
-		Content: command.Content,
-		Accept:  []string{"image/png", "image/jpeg", "image/jpg"},
-		MaxSize: 1 * 1024 * 1024,
-		MinSize: 1,
-		Width:   1000,
-		Height:  1000,
+		Content:     command.Content,
+		Accept:      []string{"image/png", "image/jpeg", "image/jpg"},
+		MaxSize:     1 * 1024 * 1024,
+		MinSize:     1,
+		Width:       1000,
+		Height:      1000,
+		MinifyLevel: cdn.MinifyLevelMedium,
 	})
 	if err != nil {
 		return nil, err

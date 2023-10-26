@@ -10,11 +10,12 @@ import (
 )
 
 type UploadImageCommand struct {
-	RandomName bool
-	FileName   string
-	Dir        string
-	Content    *multipart.FileHeader
-	IsAdmin    bool
+	RandomName  bool
+	FileName    string
+	Dir         string
+	Content     *multipart.FileHeader
+	IsAdmin     bool
+	MinifyLevel cdn.MinifyLevel
 }
 
 type UploadImageResult struct {
@@ -48,12 +49,13 @@ func (h uploadImageHandler) Handle(ctx context.Context, command UploadImageComma
 	dir := h.factory.GenerateDirName(command.Dir, command.IsAdmin, "img")
 	name := h.factory.GenerateName(command.FileName, command.RandomName)
 	bytes, err := h.factory.NewImage(cdn.ValidateConfig{
-		Content: command.Content,
-		Accept:  []string{"image/jpeg", "image/jpg", "image/png", "image/gif"},
-		MaxSize: 5 * 1024 * 1024,
-		MinSize: 1,
-		Width:   1000,
-		Height:  1000,
+		Content:     command.Content,
+		Accept:      []string{"image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"},
+		MaxSize:     5 * 1024 * 1024,
+		MinSize:     1,
+		Width:       1000,
+		Height:      1000,
+		MinifyLevel: command.MinifyLevel,
 	})
 	if err != nil {
 		return nil, err
