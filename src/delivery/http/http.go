@@ -52,11 +52,11 @@ func New(config Config) Server {
 
 func (h Server) Load(router fiber.Router) fiber.Router {
 	router.Use(h.cors(), h.deviceUUID(), h.rateLimit(), h.currentUserAccess(), h.requiredAccess())
-	router.Post("/image", h.isUploadAdminRole(Fields.Image), h.wrapWithTimeout(h.UploadImage))
+	router.Post("/image", h.isUploadAdminRole(Fields.Image), h.wrapWithTimeout(h.UploadImage, 3*time.Second))
 	router.Post("/pdf", h.isUploadAdminRole(Fields.Pdf), h.wrapWithTimeout(h.UploadPdf))
 	router.Post("/svg", h.isUploadAdminRole(Fields.Svg), h.wrapWithTimeout(h.UploadSvg))
 	router.Post("/md", h.isUploadAdminRole(Fields.Markdown), h.wrapWithTimeout(h.UploadMarkdown))
-	router.Post("/@:userName", h.currentAccount(), h.wrapWithTimeout(h.UploadAvatar))
+	router.Post("/@:userName", h.currentAccount(), h.wrapWithTimeout(h.UploadAvatar, 3*time.Second))
 	return router
 }
 
@@ -113,6 +113,10 @@ func (h Server) rateLimit() fiber.Handler {
 	})
 }
 
-func (h Server) wrapWithTimeout(fn fiber.Handler) fiber.Handler {
-	return timeout.NewWithContext(fn, 10*time.Second)
+func (h Server) wrapWithTimeout(fn fiber.Handler, secs ...time.Duration) fiber.Handler {
+	sec := 1 * time.Second
+	if len(secs) > 0 {
+		sec = secs[0]
+	}
+	return timeout.NewWithContext(fn, sec*time.Second)
 }

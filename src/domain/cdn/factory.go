@@ -3,8 +3,12 @@ package cdn
 import (
 	"bytes"
 	"image"
+	_ "image/jpeg"
 	"image/png"
+	"io"
 	"mime/multipart"
+
+	_ "golang.org/x/image/webp"
 
 	"github.com/disintegration/imaging"
 	"github.com/google/uuid"
@@ -153,6 +157,7 @@ func (f Factory) minifyImage(originalImage image.Image, level MinifyLevel) image
 }
 
 func (f Factory) watermarkFromMultipart(file multipart.File, level MinifyLevel) ([]byte, *i18np.Error) {
+	file.Seek(0, io.SeekStart)
 	originalImage, _, err := image.Decode(file)
 	if err != nil {
 		return nil, f.Errors.InternalError()
