@@ -6,6 +6,7 @@ import (
 	_ "image/jpeg"
 	"image/png"
 	"io"
+	"math"
 	"mime/multipart"
 
 	_ "golang.org/x/image/webp"
@@ -141,22 +142,30 @@ func (f Factory) watermarkImage(originalImage image.Image) (image.Image, *i18np.
 func (f Factory) minifyImage(originalImage image.Image, level MinifyLevel) image.Image {
 	const maxWidth = 1920
 	const maxHeight = 1080
-	width := originalImage.Bounds().Dx()
-	height := originalImage.Bounds().Dy()
+	var widthAndHeight = maxWidth + maxHeight
+	print(widthAndHeight)
+	originalWidth := originalImage.Bounds().Dx()
+	originalHeight := originalImage.Bounds().Dy()
 	maxSizeInBytes := int64(level * 1024 * 1024) // level * 1 MB
-
-	if int64(width*height*3) <= maxSizeInBytes {
+	if int64(originalWidth*originalHeight*3) <= maxSizeInBytes {
 		return originalImage
 	}
-
-	resizedImage := resize.Resize(uint(maxWidth), uint(maxHeight), originalImage, resize.Lanczos3)
-
-	for int64(resizedImage.Bounds().Dx()*resizedImage.Bounds().Dy()*3) > maxSizeInBytes {
-		resizedImage = resize.Resize(uint(width/2), uint(height/2), resizedImage, resize.Lanczos3)
-		width = width / 2
-		height = height / 2
+	ratio := float64(originalWidth) / float64(originalHeight)
+	var targetWidth, targetHeight int
+	if ratio > float64(maxWidth)/float64(maxHeight) {
+		targetWidth = maxWidth
+		targetHeight = int(float64(maxWidth) / ratio)
+	} else {
+		targetHeight = maxHeight
+		targetWidth = int(float64(maxHeight) * ratio)
 	}
-
+	resizedImage := resize.Resize(uint(targetWidth), uint(targetHeight), originalImage, resize.Lanczos3)
+	for int64(resizedImage.Bounds().Dx()*resizedImage.Bounds().Dy()*3) > maxSizeInBytes {
+		scaleFactor := math.Sqrt(float64(maxSizeInBytes) / float64(resizedImage.Bounds().Dx()*resizedImage.Bounds().Dy()*3))
+		targetWidth = int(float64(resizedImage.Bounds().Dx()) * scaleFactor)
+		targetHeight = int(float64(resizedImage.Bounds().Dy()) * scaleFactor)
+		resizedImage = resize.Resize(uint(targetWidth), uint(targetHeight), resizedImage, resize.Lanczos3)
+	}
 	return resizedImage
 }
 
