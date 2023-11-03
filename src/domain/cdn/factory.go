@@ -14,6 +14,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/mixarchitecture/i18np"
 	"github.com/nfnt/resize"
+	"github.com/ssibrahimbas/slug"
 )
 
 type Factory struct {
@@ -45,7 +46,10 @@ func loadWatermark() image.Image {
 	return watermarkImage
 }
 
-func (f Factory) GenerateName(name string, random bool) string {
+func (f Factory) GenerateName(name string, random bool, slugify bool) string {
+	if slugify && name != "" {
+		return slug.New(name, slug.TR) + "-" + f.RandomName()[:8]
+	}
 	if random || name == "" {
 		return f.RandomName()
 	}

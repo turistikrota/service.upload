@@ -46,7 +46,7 @@ func NewUploadPdfHandler(config UploadPdfHandlerConfig) UploadPdfHandler {
 
 func (h uploadPdfHandler) Handle(ctx context.Context, command UploadPdfCommand) (*UploadPdfResult, *i18np.Error) {
 	dir := h.factory.GenerateDirName(command.Dir, command.IsAdmin, "pdf")
-	name := h.factory.GenerateName(command.FileName, command.RandomName)
+	name := h.factory.GenerateName(command.FileName, command.RandomName, false)
 	bytes, err := h.factory.New(cdn.ValidateConfig{
 		Content: command.Content,
 		Accept:  []string{"application/pdf"},
