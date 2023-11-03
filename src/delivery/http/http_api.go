@@ -16,6 +16,7 @@ type fileRequest struct {
 	FileName    string
 	DirName     string
 	RandomName  bool
+	Slugify     bool
 	IsAdmin     bool
 	MinifyLevel cdn.MinifyLevel
 	Content     *multipart.FileHeader
@@ -33,6 +34,7 @@ func (h Server) UploadImage(ctx *fiber.Ctx) error {
 		FileName:    file.FileName,
 		Dir:         file.DirName,
 		MinifyLevel: file.MinifyLevel,
+		Slugify:     file.Slugify,
 	})
 	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.ImageUploaded, func() interface{} {
 		return dto.Response.ImageUploaded(res)
@@ -114,6 +116,7 @@ func (h Server) validateAdmin(ctx *fiber.Ctx, field string, errorMsg string) (*f
 	fileName := ctx.FormValue("fileName", "")
 	dirName := ctx.FormValue("dirName", "")
 	randomName := ctx.FormValue("randomName", "true")
+	slugify := ctx.FormValue("slugify", "false")
 	minifyLevel := ctx.FormValue("minifyLevel", "0")
 	level := cdn.MinifyLevelHigh
 	if minifyLevel == "medium" {
@@ -126,6 +129,7 @@ func (h Server) validateAdmin(ctx *fiber.Ctx, field string, errorMsg string) (*f
 	u := ctx.Locals(field)
 	return &fileRequest{
 		FileName:    fileName,
+		Slugify:     slugify == "true",
 		DirName:     dirName,
 		RandomName:  randomName == "true",
 		IsAdmin:     u != nil && u.(string) == "true",

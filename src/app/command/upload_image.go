@@ -11,6 +11,7 @@ import (
 
 type UploadImageCommand struct {
 	RandomName  bool
+	Slugify     bool
 	FileName    string
 	Dir         string
 	Content     *multipart.FileHeader
@@ -47,7 +48,7 @@ func NewUploadImageHandler(config UploadImageHandlerConfig) UploadImageHandler {
 
 func (h uploadImageHandler) Handle(ctx context.Context, command UploadImageCommand) (*UploadImageResult, *i18np.Error) {
 	dir := h.factory.GenerateDirName(command.Dir, command.IsAdmin, "img")
-	name := h.factory.GenerateName(command.FileName, command.RandomName)
+	name := h.factory.GenerateName(command.FileName, command.RandomName, command.Slugify)
 	bytes, err := h.factory.NewImage(cdn.ValidateConfig{
 		Content:     command.Content,
 		Accept:      []string{"image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"},

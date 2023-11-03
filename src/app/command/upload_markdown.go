@@ -46,7 +46,7 @@ func NewUploadMarkdownHandler(config UploadMarkdownHandlerConfig) UploadMarkdown
 
 func (h uploadMarkdownHandler) Handle(ctx context.Context, command UploadMarkdownCommand) (*UploadMarkdownResult, *i18np.Error) {
 	dir := h.factory.GenerateDirName(command.Dir, command.IsAdmin, "md")
-	name := h.factory.GenerateName(command.FileName, command.RandomName)
+	name := h.factory.GenerateName(command.FileName, command.RandomName, false)
 	bytes, err := h.factory.New(cdn.ValidateConfig{
 		Content: command.Content,
 		Accept:  []string{"text/markdown"},

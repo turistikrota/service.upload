@@ -46,7 +46,7 @@ func NewUploadSvgHandler(config UploadSvgHandlerConfig) UploadSvgHandler {
 
 func (h uploadSvgHandler) Handle(ctx context.Context, command UploadSvgCommand) (*UploadSvgResult, *i18np.Error) {
 	dir := h.factory.GenerateDirName(command.Dir, command.IsAdmin, "svg")
-	name := h.factory.GenerateName(command.FileName, command.RandomName)
+	name := h.factory.GenerateName(command.FileName, command.RandomName, false)
 	bytes, err := h.factory.New(cdn.ValidateConfig{
 		Content:     command.Content,
 		Accept:      []string{"image/svg+xml"},

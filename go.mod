@@ -10,7 +10,9 @@ require (
 	github.com/mixarchitecture/microp v0.0.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/sirupsen/logrus v1.9.3
+	github.com/ssibrahimbas/slug v0.0.0-20230331230816-02d7d0a3cbee
 	github.com/turistikrota/service.shared v0.0.24
+	golang.org/x/image v0.13.0
 )
 
 require (
@@ -49,7 +51,6 @@ require (
 	go.deanishe.net/env v0.5.1 // indirect
 	go.mongodb.org/mongo-driver v1.12.0 // indirect
 	golang.org/x/crypto v0.10.0 // indirect
-	golang.org/x/image v0.13.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sys v0.9.0 // indirect
 	golang.org/x/term v0.9.0 // indirect
