@@ -118,11 +118,11 @@ func (h Server) validateAdmin(ctx *fiber.Ctx, field string, errorMsg string) (*f
 	randomName := ctx.FormValue("randomName", "true")
 	slugify := ctx.FormValue("slugify", "false")
 	minifyLevel := ctx.FormValue("minifyLevel", "0")
-	level := cdn.MinifyLevelHigh
+	level := cdn.MinifyLevelLow
 	if minifyLevel == "medium" {
 		level = cdn.MinifyLevelMedium
-	} else if minifyLevel == "low" {
-		level = cdn.MinifyLevelLow
+	} else if minifyLevel == "high" {
+		level = cdn.MinifyLevelHigh
 	} else if minifyLevel == "none" {
 		level = cdn.MinifyLevelNone
 	}
