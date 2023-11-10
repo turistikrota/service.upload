@@ -47,6 +47,16 @@ func NewApplication(cnf Config) app.Application {
 				Factory:  cdnFactory,
 				CqrsBase: base,
 			}),
+			UploadOwnerAvatar: command.NewUploadOwnerAvatarHandler(command.UploadOwnerAvatarHandlerConfig{
+				Repo:     cdnRepo,
+				Factory:  cdnFactory,
+				CqrsBase: base,
+			}),
+			UploadOwnerCover: command.NewUploadOwnerCoverHandler(command.UploadOwnerCoverHandlerConfig{
+				Repo:     cdnRepo,
+				Factory:  cdnFactory,
+				CqrsBase: base,
+			}),
 			UploadMarkdown: command.NewUploadMarkdownHandler(command.UploadMarkdownHandlerConfig{
 				Repo:     cdnRepo,
 				Factory:  cdnFactory,

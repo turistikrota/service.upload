@@ -14,6 +14,7 @@ import (
 	"github.com/turistikrota/service.shared/auth/token"
 	"github.com/turistikrota/service.shared/server/http/auth"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
+	"github.com/turistikrota/service.shared/server/http/auth/current_owner"
 	"github.com/turistikrota/service.shared/server/http/auth/current_user"
 	"github.com/turistikrota/service.shared/server/http/auth/device_uuid"
 	"github.com/turistikrota/service.shared/server/http/auth/required_access"
@@ -57,6 +58,8 @@ func (h Server) Load(router fiber.Router) fiber.Router {
 	router.Post("/svg", h.isUploadAdminRole(Fields.Svg), h.wrapWithTimeout(h.UploadSvg))
 	router.Post("/md", h.isUploadAdminRole(Fields.Markdown), h.wrapWithTimeout(h.UploadMarkdown))
 	router.Post("/@:userName", h.currentAccount(), h.wrapWithTimeout(h.UploadAvatar, 3*time.Second))
+	router.Post("/owner/avatar", h.currentAccount(), h.currentOwner(config.Roles.Owner.Super, config.Roles.Owner.UploadAvatar), h.wrapWithTimeout(h.UploadOwnerAvatar, 3*time.Second))
+	router.Post("/owner/cover", h.currentAccount(), h.currentOwner(config.Roles.Owner.Super, config.Roles.Owner.UploadCover), h.wrapWithTimeout(h.UploadOwnerCover, 3*time.Second))
 	return router
 }
 
@@ -68,10 +71,18 @@ func (h Server) deviceUUID() fiber.Handler {
 
 func (h Server) currentAccount() fiber.Handler {
 	return current_account.New(current_account.Config{
-		FieldName:    "userName",
 		I18n:         &h.i18n,
 		RequiredKey:  Messages.Error.RequiredAuth,
 		ForbiddenKey: Messages.Error.Forbidden,
+	})
+}
+
+func (h Server) currentOwner(roles ...string) fiber.Handler {
+	return current_owner.New(current_owner.Config{
+		I18n:         &h.i18n,
+		Roles:        roles,
+		RequiredKey:  Messages.Error.RequiredOwnerSelect,
+		ForbiddenKey: Messages.Error.ForbiddenOwnerSelect,
 	})
 }
 

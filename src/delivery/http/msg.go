@@ -7,21 +7,24 @@ type successMessages struct {
 	PdfUploaded      string
 	MarkdownUploaded string
 	AvatarUploaded   string
+	Ok               string
 }
 
 type errorMessages struct {
-	Create             string
-	Get                string
-	OnlyAcceptFormData string
-	ImageNotFound      string
-	PdfNotFound        string
-	MarkdownNotFound   string
-	RequiredAuth       string
-	AdminRoute         string
-	CurrentUserAccess  string
-	UserNameRequired   string
-	AvatarNotFound     string
-	Forbidden          string
+	Create               string
+	Get                  string
+	OnlyAcceptFormData   string
+	ImageNotFound        string
+	PdfNotFound          string
+	MarkdownNotFound     string
+	RequiredAuth         string
+	AdminRoute           string
+	CurrentUserAccess    string
+	UserNameRequired     string
+	AvatarNotFound       string
+	Forbidden            string
+	RequiredOwnerSelect  string
+	ForbiddenOwnerSelect string
 }
 
 type messages struct {
@@ -37,19 +40,22 @@ var Messages = messages{
 		PdfUploaded:      "http_success_pdf_uploaded",
 		MarkdownUploaded: "http_success_markdown_uploaded",
 		AvatarUploaded:   "http_success_avatar_uploaded",
+		Ok:               "http_success_ok",
 	},
 	Error: errorMessages{
-		Create:             "http_error_create",
-		Get:                "http_error_get",
-		OnlyAcceptFormData: "http_error_only_accept_form_data",
-		ImageNotFound:      "http_error_image_not_found",
-		PdfNotFound:        "http_error_pdf_not_found",
-		MarkdownNotFound:   "http_error_markdown_not_found",
-		RequiredAuth:       "http_required_auth",
-		AdminRoute:         "http_admin_route",
-		CurrentUserAccess:  "http_current_user_access",
-		UserNameRequired:   "http_user_name_required",
-		AvatarNotFound:     "http_avatar_not_found",
-		Forbidden:          "http_forbidden",
+		Create:               "http_error_create",
+		Get:                  "http_error_get",
+		OnlyAcceptFormData:   "http_error_only_accept_form_data",
+		ImageNotFound:        "http_error_image_not_found",
+		PdfNotFound:          "http_error_pdf_not_found",
+		MarkdownNotFound:     "http_error_markdown_not_found",
+		RequiredAuth:         "http_required_auth",
+		AdminRoute:           "http_admin_route",
+		CurrentUserAccess:    "http_current_user_access",
+		UserNameRequired:     "http_user_name_required",
+		AvatarNotFound:       "http_avatar_not_found",
+		Forbidden:            "http_forbidden",
+		RequiredOwnerSelect:  "http_error_required_owner_select",
+		ForbiddenOwnerSelect: "http_error_forbidden_owner_select",
 	},
 }
