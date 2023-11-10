@@ -98,10 +98,10 @@ func (h Server) UploadAvatar(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	name := current_account.Parse(ctx)
+	account := current_account.Parse(ctx)
 	res, error := h.app.Commands.UploadAvatar.Handle(ctx.UserContext(), command.UploadAvatarCommand{
 		Content:  avatar,
-		UserName: name,
+		UserName: account.Name,
 	})
 	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.AvatarUploaded, func() interface{} {
 		return dto.Response.AvatarUploaded(res)
@@ -113,10 +113,10 @@ func (h Server) UploadOwnerAvatar(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	nickName := current_owner.Parse(ctx)
+	owner := current_owner.Parse(ctx)
 	res, error := h.app.Commands.UploadOwnerAvatar.Handle(ctx.UserContext(), command.UploadOwnerAvatarCommand{
 		Content:  avatar,
-		NickName: nickName,
+		NickName: owner.NickName,
 	})
 	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.Ok, func() interface{} {
 		return dto.Response.OwnerAvatarUploaded(res)
@@ -128,10 +128,10 @@ func (h Server) UploadOwnerCover(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	nickName := current_owner.Parse(ctx)
+	owner := current_owner.Parse(ctx)
 	res, error := h.app.Commands.UploadOwnerCover.Handle(ctx.UserContext(), command.UploadOwnerCoverCommand{
 		Content:  avatar,
-		NickName: nickName,
+		NickName: owner.NickName,
 	})
 	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.Ok, func() interface{} {
 		return dto.Response.OwnerCoverUploaded(res)

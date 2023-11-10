@@ -58,8 +58,8 @@ func (h Server) Load(router fiber.Router) fiber.Router {
 	router.Post("/svg", h.isUploadAdminRole(Fields.Svg), h.wrapWithTimeout(h.UploadSvg))
 	router.Post("/md", h.isUploadAdminRole(Fields.Markdown), h.wrapWithTimeout(h.UploadMarkdown))
 	router.Post("/@:userName", h.currentAccount(), h.wrapWithTimeout(h.UploadAvatar, 3*time.Second))
-	router.Post("/owner/avatar", h.currentOwner(config.Roles.Owner.Super, config.Roles.Owner.UploadAvatar), h.wrapWithTimeout(h.UploadOwnerAvatar, 3*time.Second))
-	router.Post("/owner/cover", h.currentOwner(config.Roles.Owner.Super, config.Roles.Owner.UploadCover), h.wrapWithTimeout(h.UploadOwnerCover, 3*time.Second))
+	router.Post("/owner/avatar", h.currentAccount(), h.currentOwner(config.Roles.Owner.Super, config.Roles.Owner.UploadAvatar), h.wrapWithTimeout(h.UploadOwnerAvatar, 3*time.Second))
+	router.Post("/owner/cover", h.currentAccount(), h.currentOwner(config.Roles.Owner.Super, config.Roles.Owner.UploadCover), h.wrapWithTimeout(h.UploadOwnerCover, 3*time.Second))
 	return router
 }
 
@@ -71,7 +71,6 @@ func (h Server) deviceUUID() fiber.Handler {
 
 func (h Server) currentAccount() fiber.Handler {
 	return current_account.New(current_account.Config{
-		FieldName:    "userName",
 		I18n:         &h.i18n,
 		RequiredKey:  Messages.Error.RequiredAuth,
 		ForbiddenKey: Messages.Error.Forbidden,
