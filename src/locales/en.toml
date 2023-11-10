@@ -61,3 +61,5 @@ cache_not_runnable = "Not runnable. Please check your configuration."
 get_query_failed = "Get query failed."
 update_query_not_found = "Update query not found."
 update_query_failed = "Update query failed."
+
+user_expired = "User expired."
