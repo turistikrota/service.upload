@@ -36,6 +36,7 @@ http_success_image_uploaded = "Resim başarıyla yüklendi."
 http_success_pdf_uploaded = "PDF başarıyla yüklendi."
 http_success_markdown_uploaded = "Markdown başarıyla yüklendi."
 http_success_avatar_uploaded = "Avatar başarıyla yüklendi."
+http_success_ok = "İşlem başarılı."
 
 http_error_required_auth = "Bu işlem için kimlik doğrulaması gerekiyor."
 http_error_current_user_access = "Bu işlemi gerçekleştirmek için yeterli izne sahip değilsiniz."
@@ -50,6 +51,8 @@ http_current_user_access = "Bu işlemi gerçekleştirmek için yeterli izne sahi
 http_user_name_required = "Kullanıcı adı zorunludur."
 http_avatar_not_found = "Avatar bulunamadı."
 http_forbidden = "Bu işlemi gerçekleştirmek için yeterli izne sahip değilsiniz."
+http_error_forbidden_owner_select = "Bu işlemi gerçekleştirmek için yeterli izne sahip değilsiniz."
+http_error_required_owner_select = "Satıcı seçimi zorunludur."
 
 cache_an_error_on_exist = "Cache varken bir hata oluştu."
 cache_an_error_on_get = "Cache getirilirken bir hata oluştu."

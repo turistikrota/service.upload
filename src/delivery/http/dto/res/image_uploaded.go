@@ -35,3 +35,15 @@ func (r *response) AvatarUploaded(res *command.UploadAvatarResult) *FileUploaded
 		Url: res.Url,
 	}
 }
+
+func (r *response) OwnerAvatarUploaded(res *command.UploadOwnerAvatarResult) *FileUploadedResponse {
+	return &FileUploadedResponse{
+		Url: res.Url,
+	}
+}
+
+func (r *response) OwnerCoverUploaded(res *command.UploadOwnerCoverResult) *FileUploadedResponse {
+	return &FileUploadedResponse{
+		Url: res.Url,
+	}
+}

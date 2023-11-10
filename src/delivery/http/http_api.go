@@ -7,6 +7,7 @@ import (
 	httpI18n "github.com/mixarchitecture/microp/server/http/i18n"
 	"github.com/mixarchitecture/microp/server/http/result"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
+	"github.com/turistikrota/service.shared/server/http/auth/current_owner"
 	"github.com/turistikrota/service.upload/src/app/command"
 	"github.com/turistikrota/service.upload/src/delivery/http/dto"
 	"github.com/turistikrota/service.upload/src/domain/cdn"
@@ -107,6 +108,36 @@ func (h Server) UploadAvatar(ctx *fiber.Ctx) error {
 	})
 }
 
+func (h Server) UploadOwnerAvatar(ctx *fiber.Ctx) error {
+	avatar, err := h.validateAvatar(ctx)
+	if err != nil {
+		return err
+	}
+	nickName := current_owner.Parse(ctx)
+	res, error := h.app.Commands.UploadOwnerAvatar.Handle(ctx.UserContext(), command.UploadOwnerAvatarCommand{
+		Content:  avatar,
+		NickName: nickName,
+	})
+	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.Ok, func() interface{} {
+		return dto.Response.OwnerAvatarUploaded(res)
+	})
+}
+
+func (h Server) UploadOwnerCover(ctx *fiber.Ctx) error {
+	avatar, err := h.validateCover(ctx)
+	if err != nil {
+		return err
+	}
+	nickName := current_owner.Parse(ctx)
+	res, error := h.app.Commands.UploadOwnerCover.Handle(ctx.UserContext(), command.UploadOwnerCoverCommand{
+		Content:  avatar,
+		NickName: nickName,
+	})
+	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.Ok, func() interface{} {
+		return dto.Response.OwnerCoverUploaded(res)
+	})
+}
+
 func (h Server) validateAdmin(ctx *fiber.Ctx, field string, errorMsg string) (*fileRequest, error) {
 	image, err := ctx.FormFile(field)
 	if err != nil {
@@ -140,6 +171,15 @@ func (h Server) validateAdmin(ctx *fiber.Ctx, field string, errorMsg string) (*f
 
 func (h Server) validateAvatar(ctx *fiber.Ctx) (*multipart.FileHeader, error) {
 	image, err := ctx.FormFile("avatar")
+	if err != nil {
+		l, a := httpI18n.GetLanguagesInContext(h.i18n, ctx)
+		return nil, result.Error(h.i18n.Translate(Messages.Error.AvatarNotFound, l, a))
+	}
+	return image, nil
+}
+
+func (h Server) validateCover(ctx *fiber.Ctx) (*multipart.FileHeader, error) {
+	image, err := ctx.FormFile("cover")
 	if err != nil {
 		l, a := httpI18n.GetLanguagesInContext(h.i18n, ctx)
 		return nil, result.Error(h.i18n.Translate(Messages.Error.AvatarNotFound, l, a))
