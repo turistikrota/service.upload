@@ -10,6 +10,8 @@ type ownerRoles struct {
 	Super        string
 	UploadAvatar string
 	UploadCover  string
+	PostUpdate   string
+	PostCreate   string
 }
 
 type roles struct {
@@ -27,5 +29,7 @@ var Roles = roles{
 		Super:        "owner.super",
 		UploadAvatar: "owner.upload.avatar",
 		UploadCover:  "owner.upload.cover",
+		PostUpdate:   "post.update",
+		PostCreate:   "post.delete",
 	},
 }

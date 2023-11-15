@@ -138,6 +138,25 @@ func (h Server) UploadOwnerCover(ctx *fiber.Ctx) error {
 	})
 }
 
+func (h Server) UploadPostImage(ctx *fiber.Ctx) error {
+	file, err := h.validatePost(ctx, Fields.Image, Messages.Error.ImageNotFound)
+	if err != nil {
+		return err
+	}
+	res, error := h.app.Commands.UploadImage.Handle(ctx.UserContext(), command.UploadImageCommand{
+		RandomName:  file.RandomName,
+		Content:     file.Content,
+		IsAdmin:     file.IsAdmin,
+		FileName:    file.FileName,
+		Dir:         file.DirName,
+		MinifyLevel: file.MinifyLevel,
+		Slugify:     file.Slugify,
+	})
+	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.ImageUploaded, func() interface{} {
+		return dto.Response.ImageUploaded(res)
+	})
+}
+
 func (h Server) validateAdmin(ctx *fiber.Ctx, field string, errorMsg string) (*fileRequest, error) {
 	image, err := ctx.FormFile(field)
 	if err != nil {
@@ -185,4 +204,22 @@ func (h Server) validateCover(ctx *fiber.Ctx) (*multipart.FileHeader, error) {
 		return nil, result.Error(h.i18n.Translate(Messages.Error.AvatarNotFound, l, a))
 	}
 	return image, nil
+}
+
+func (h Server) validatePost(ctx *fiber.Ctx, field string, errorMsg string) (*fileRequest, error) {
+	image, err := ctx.FormFile(field)
+	if err != nil {
+		l, a := httpI18n.GetLanguagesInContext(h.i18n, ctx)
+		return nil, result.Error(h.i18n.Translate(errorMsg, l, a))
+	}
+	title := ctx.FormValue("title", "")
+	return &fileRequest{
+		FileName:    title,
+		Slugify:     true,
+		DirName:     "post",
+		RandomName:  true,
+		IsAdmin:     false,
+		Content:     image,
+		MinifyLevel: cdn.MinifyLevelMedium,
+	}, nil
 }
