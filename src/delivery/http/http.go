@@ -60,6 +60,7 @@ func (h Server) Load(router fiber.Router) fiber.Router {
 	router.Post("/@:userName", h.currentAccount(), h.wrapWithTimeout(h.UploadAvatar, 3*time.Second))
 	router.Post("/owner/avatar", h.currentAccount(), h.currentOwner(config.Roles.Owner.Super, config.Roles.Owner.UploadAvatar), h.wrapWithTimeout(h.UploadOwnerAvatar, 3*time.Second))
 	router.Post("/owner/cover", h.currentAccount(), h.currentOwner(config.Roles.Owner.Super, config.Roles.Owner.UploadCover), h.wrapWithTimeout(h.UploadOwnerCover, 3*time.Second))
+	router.Post("/post", h.currentAccount(), h.currentOwner(config.Roles.Owner.Super, config.Roles.Owner.PostCreate, config.Roles.Owner.PostUpdate), h.wrapWithTimeout(h.UploadPostImage, 3*time.Second))
 	return router
 }
 
