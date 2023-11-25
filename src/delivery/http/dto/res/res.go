@@ -8,8 +8,8 @@ type Response interface {
 	SvgUploaded(res *command.UploadSvgResult) *FileUploadedResponse
 	MarkdownUploaded(res *command.UploadMarkdownResult) *FileUploadedResponse
 	AvatarUploaded(res *command.UploadAvatarResult) *FileUploadedResponse
-	OwnerAvatarUploaded(res *command.UploadOwnerAvatarResult) *FileUploadedResponse
-	OwnerCoverUploaded(res *command.UploadOwnerCoverResult) *FileUploadedResponse
+	BusinessAvatarUploaded(res *command.UploadBusinessAvatarResult) *FileUploadedResponse
+	BusinessCoverUploaded(res *command.UploadBusinessCoverResult) *FileUploadedResponse
 }
 
 type response struct{}

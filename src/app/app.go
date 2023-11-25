@@ -10,13 +10,13 @@ type Application struct {
 }
 
 type Commands struct {
-	UploadImage       command.UploadImageHandler
-	UploadMarkdown    command.UploadMarkdownHandler
-	UploadPdf         command.UploadPdfHandler
-	UploadSvg         command.UploadSvgHandler
-	UploadAvatar      command.UploadAvatarHandler
-	UploadOwnerAvatar command.UploadOwnerAvatarHandler
-	UploadOwnerCover  command.UploadOwnerCoverHandler
+	UploadImage          command.UploadImageHandler
+	UploadMarkdown       command.UploadMarkdownHandler
+	UploadPdf            command.UploadPdfHandler
+	UploadSvg            command.UploadSvgHandler
+	UploadAvatar         command.UploadAvatarHandler
+	UploadBusinessAvatar command.UploadBusinessAvatarHandler
+	UploadBusinessCover  command.UploadBusinessCoverHandler
 }
 
 type Queries struct{}

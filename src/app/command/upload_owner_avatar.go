@@ -10,31 +10,31 @@ import (
 	"github.com/turistikrota/service.upload/src/domain/cdn"
 )
 
-type UploadOwnerAvatarCommand struct {
+type UploadBusinessAvatarCommand struct {
 	NickName string
 	Content  *multipart.FileHeader
 }
 
-type UploadOwnerAvatarResult struct {
+type UploadBusinessAvatarResult struct {
 	Url string
 }
 
-type UploadOwnerAvatarHandler decorator.CommandHandler[UploadOwnerAvatarCommand, *UploadOwnerAvatarResult]
+type UploadBusinessAvatarHandler decorator.CommandHandler[UploadBusinessAvatarCommand, *UploadBusinessAvatarResult]
 
-type uploadOwnerAvatarHandler struct {
+type uploadBusinessAvatarHandler struct {
 	repo    cdn.Repository
 	factory cdn.Factory
 }
 
-type UploadOwnerAvatarHandlerConfig struct {
+type UploadBusinessAvatarHandlerConfig struct {
 	Repo     cdn.Repository
 	Factory  cdn.Factory
 	CqrsBase decorator.Base
 }
 
-func NewUploadOwnerAvatarHandler(config UploadOwnerAvatarHandlerConfig) UploadOwnerAvatarHandler {
-	return decorator.ApplyCommandDecorators[UploadOwnerAvatarCommand, *UploadOwnerAvatarResult](
-		uploadOwnerAvatarHandler{
+func NewUploadBusinessAvatarHandler(config UploadBusinessAvatarHandlerConfig) UploadBusinessAvatarHandler {
+	return decorator.ApplyCommandDecorators[UploadBusinessAvatarCommand, *UploadBusinessAvatarResult](
+		uploadBusinessAvatarHandler{
 			repo:    config.Repo,
 			factory: config.Factory,
 		},
@@ -42,7 +42,7 @@ func NewUploadOwnerAvatarHandler(config UploadOwnerAvatarHandlerConfig) UploadOw
 	)
 }
 
-func (h uploadOwnerAvatarHandler) Handle(ctx context.Context, command UploadOwnerAvatarCommand) (*UploadOwnerAvatarResult, *i18np.Error) {
+func (h uploadBusinessAvatarHandler) Handle(ctx context.Context, command UploadBusinessAvatarCommand) (*UploadBusinessAvatarResult, *i18np.Error) {
 	dir := "avatars"
 	name := fmt.Sprintf("~%s", command.NickName)
 	bytes, err := h.factory.NewImage(cdn.ValidateConfig{
@@ -62,5 +62,5 @@ func (h uploadOwnerAvatarHandler) Handle(ctx context.Context, command UploadOwne
 	if !success {
 		return nil, h.factory.Errors.InternalError()
 	}
-	return &UploadOwnerAvatarResult{Url: url}, nil
+	return &UploadBusinessAvatarResult{Url: url}, nil
 }

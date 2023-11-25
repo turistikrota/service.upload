@@ -36,13 +36,13 @@ func (r *response) AvatarUploaded(res *command.UploadAvatarResult) *FileUploaded
 	}
 }
 
-func (r *response) OwnerAvatarUploaded(res *command.UploadOwnerAvatarResult) *FileUploadedResponse {
+func (r *response) BusinessAvatarUploaded(res *command.UploadBusinessAvatarResult) *FileUploadedResponse {
 	return &FileUploadedResponse{
 		Url: res.Url,
 	}
 }
 
-func (r *response) OwnerCoverUploaded(res *command.UploadOwnerCoverResult) *FileUploadedResponse {
+func (r *response) BusinessCoverUploaded(res *command.UploadBusinessCoverResult) *FileUploadedResponse {
 	return &FileUploadedResponse{
 		Url: res.Url,
 	}

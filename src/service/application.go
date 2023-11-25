@@ -47,12 +47,12 @@ func NewApplication(cnf Config) app.Application {
 				Factory:  cdnFactory,
 				CqrsBase: base,
 			}),
-			UploadOwnerAvatar: command.NewUploadOwnerAvatarHandler(command.UploadOwnerAvatarHandlerConfig{
+			UploadBusinessAvatar: command.NewUploadBusinessAvatarHandler(command.UploadBusinessAvatarHandlerConfig{
 				Repo:     cdnRepo,
 				Factory:  cdnFactory,
 				CqrsBase: base,
 			}),
-			UploadOwnerCover: command.NewUploadOwnerCoverHandler(command.UploadOwnerCoverHandlerConfig{
+			UploadBusinessCover: command.NewUploadBusinessCoverHandler(command.UploadBusinessCoverHandlerConfig{
 				Repo:     cdnRepo,
 				Factory:  cdnFactory,
 				CqrsBase: base,
