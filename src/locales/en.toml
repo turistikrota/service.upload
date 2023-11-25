@@ -50,7 +50,7 @@ http_current_user_access = "Current user access."
 http_user_name_required = "User name required."
 http_avatar_not_found = "Avatar not found."
 http_forbidden = "You don't have permission to access this resource."
-http_error_required_owner_select = "Required owner select."
+http_error_required_owner_select = "Required business select."
 http_error_forbidden_owner_select = "Your don't have permission to access this resource."
 
 cache_an_error_on_exist = "An error on exist."

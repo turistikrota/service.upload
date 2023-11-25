@@ -7,7 +7,7 @@ import (
 	httpI18n "github.com/mixarchitecture/microp/server/http/i18n"
 	"github.com/mixarchitecture/microp/server/http/result"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
-	"github.com/turistikrota/service.shared/server/http/auth/current_owner"
+	"github.com/turistikrota/service.shared/server/http/auth/current_business"
 	"github.com/turistikrota/service.upload/src/app/command"
 	"github.com/turistikrota/service.upload/src/delivery/http/dto"
 	"github.com/turistikrota/service.upload/src/domain/cdn"
@@ -108,38 +108,38 @@ func (h Server) UploadAvatar(ctx *fiber.Ctx) error {
 	})
 }
 
-func (h Server) UploadOwnerAvatar(ctx *fiber.Ctx) error {
+func (h Server) UploadBusinessAvatar(ctx *fiber.Ctx) error {
 	avatar, err := h.validateAvatar(ctx)
 	if err != nil {
 		return err
 	}
-	owner := current_owner.Parse(ctx)
-	res, error := h.app.Commands.UploadOwnerAvatar.Handle(ctx.UserContext(), command.UploadOwnerAvatarCommand{
+	business := current_business.Parse(ctx)
+	res, error := h.app.Commands.UploadBusinessAvatar.Handle(ctx.UserContext(), command.UploadBusinessAvatarCommand{
 		Content:  avatar,
-		NickName: owner.NickName,
+		NickName: business.NickName,
 	})
 	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.Ok, func() interface{} {
-		return dto.Response.OwnerAvatarUploaded(res)
+		return dto.Response.BusinessAvatarUploaded(res)
 	})
 }
 
-func (h Server) UploadOwnerCover(ctx *fiber.Ctx) error {
+func (h Server) UploadBusinessCover(ctx *fiber.Ctx) error {
 	avatar, err := h.validateCover(ctx)
 	if err != nil {
 		return err
 	}
-	owner := current_owner.Parse(ctx)
-	res, error := h.app.Commands.UploadOwnerCover.Handle(ctx.UserContext(), command.UploadOwnerCoverCommand{
+	business := current_business.Parse(ctx)
+	res, error := h.app.Commands.UploadBusinessCover.Handle(ctx.UserContext(), command.UploadBusinessCoverCommand{
 		Content:  avatar,
-		NickName: owner.NickName,
+		NickName: business.NickName,
 	})
 	return result.IfSuccessDetail(error, ctx, h.i18n, Messages.Success.Ok, func() interface{} {
-		return dto.Response.OwnerCoverUploaded(res)
+		return dto.Response.BusinessCoverUploaded(res)
 	})
 }
 
-func (h Server) UploadPostImage(ctx *fiber.Ctx) error {
-	file, err := h.validatePost(ctx, Fields.Image, Messages.Error.ImageNotFound)
+func (h Server) UploadListingImage(ctx *fiber.Ctx) error {
+	file, err := h.validateListing(ctx, Fields.Image, Messages.Error.ImageNotFound)
 	if err != nil {
 		return err
 	}
@@ -206,7 +206,7 @@ func (h Server) validateCover(ctx *fiber.Ctx) (*multipart.FileHeader, error) {
 	return image, nil
 }
 
-func (h Server) validatePost(ctx *fiber.Ctx, field string, errorMsg string) (*fileRequest, error) {
+func (h Server) validateListing(ctx *fiber.Ctx, field string, errorMsg string) (*fileRequest, error) {
 	image, err := ctx.FormFile(field)
 	if err != nil {
 		l, a := httpI18n.GetLanguagesInContext(h.i18n, ctx)
@@ -216,7 +216,7 @@ func (h Server) validatePost(ctx *fiber.Ctx, field string, errorMsg string) (*fi
 	return &fileRequest{
 		FileName:    title,
 		Slugify:     true,
-		DirName:     "post",
+		DirName:     "listing",
 		RandomName:  true,
 		IsAdmin:     false,
 		Content:     image,

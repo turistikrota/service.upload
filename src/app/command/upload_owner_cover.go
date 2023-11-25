@@ -10,31 +10,31 @@ import (
 	"github.com/turistikrota/service.upload/src/domain/cdn"
 )
 
-type UploadOwnerCoverCommand struct {
+type UploadBusinessCoverCommand struct {
 	NickName string
 	Content  *multipart.FileHeader
 }
 
-type UploadOwnerCoverResult struct {
+type UploadBusinessCoverResult struct {
 	Url string
 }
 
-type UploadOwnerCoverHandler decorator.CommandHandler[UploadOwnerCoverCommand, *UploadOwnerCoverResult]
+type UploadBusinessCoverHandler decorator.CommandHandler[UploadBusinessCoverCommand, *UploadBusinessCoverResult]
 
-type uploadOwnerCoverHandler struct {
+type uploadBusinessCoverHandler struct {
 	repo    cdn.Repository
 	factory cdn.Factory
 }
 
-type UploadOwnerCoverHandlerConfig struct {
+type UploadBusinessCoverHandlerConfig struct {
 	Repo     cdn.Repository
 	Factory  cdn.Factory
 	CqrsBase decorator.Base
 }
 
-func NewUploadOwnerCoverHandler(config UploadOwnerCoverHandlerConfig) UploadOwnerCoverHandler {
-	return decorator.ApplyCommandDecorators[UploadOwnerCoverCommand, *UploadOwnerCoverResult](
-		uploadOwnerCoverHandler{
+func NewUploadBusinessCoverHandler(config UploadBusinessCoverHandlerConfig) UploadBusinessCoverHandler {
+	return decorator.ApplyCommandDecorators[UploadBusinessCoverCommand, *UploadBusinessCoverResult](
+		uploadBusinessCoverHandler{
 			repo:    config.Repo,
 			factory: config.Factory,
 		},
@@ -42,7 +42,7 @@ func NewUploadOwnerCoverHandler(config UploadOwnerCoverHandlerConfig) UploadOwne
 	)
 }
 
-func (h uploadOwnerCoverHandler) Handle(ctx context.Context, command UploadOwnerCoverCommand) (*UploadOwnerCoverResult, *i18np.Error) {
+func (h uploadBusinessCoverHandler) Handle(ctx context.Context, command UploadBusinessCoverCommand) (*UploadBusinessCoverResult, *i18np.Error) {
 	dir := "covers"
 	name := fmt.Sprintf("~%s", command.NickName)
 	bytes, err := h.factory.NewImage(cdn.ValidateConfig{
@@ -62,5 +62,5 @@ func (h uploadOwnerCoverHandler) Handle(ctx context.Context, command UploadOwner
 	if !success {
 		return nil, h.factory.Errors.InternalError()
 	}
-	return &UploadOwnerCoverResult{Url: url}, nil
+	return &UploadBusinessCoverResult{Url: url}, nil
 }

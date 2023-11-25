@@ -7,17 +7,17 @@ type cdnRoles struct {
 }
 
 type ownerRoles struct {
-	Super        string
-	UploadAvatar string
-	UploadCover  string
-	PostUpdate   string
-	PostCreate   string
+	Super         string
+	UploadAvatar  string
+	UploadCover   string
+	ListingUpdate string
+	ListingCreate string
 }
 
 type roles struct {
 	base_roles.Roles
-	Cdn   cdnRoles
-	Owner ownerRoles
+	Cdn      cdnRoles
+	Business ownerRoles
 }
 
 var Roles = roles{
@@ -25,11 +25,11 @@ var Roles = roles{
 	Cdn: cdnRoles{
 		Upload: "cdn.upload",
 	},
-	Owner: ownerRoles{
-		Super:        "owner.super",
-		UploadAvatar: "owner.upload.avatar",
-		UploadCover:  "owner.upload.cover",
-		PostUpdate:   "post.update",
-		PostCreate:   "post.delete",
+	Business: ownerRoles{
+		Super:         "business.super",
+		UploadAvatar:  "business.upload.avatar",
+		UploadCover:   "business.upload.cover",
+		ListingUpdate: "listing.update",
+		ListingCreate: "listing.delete",
 	},
 }

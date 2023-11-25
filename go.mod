@@ -11,7 +11,7 @@ require (
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/sirupsen/logrus v1.9.3
 	github.com/ssibrahimbas/slug v0.0.0-20230331230816-02d7d0a3cbee
-	github.com/turistikrota/service.shared v0.0.27-0.20231030200320-c6b4ae8db80e
+	github.com/turistikrota/service.shared v0.0.27-0.20231119143300-e176ca37956f
 	golang.org/x/image v0.13.0
 )
 
