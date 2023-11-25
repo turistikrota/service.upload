@@ -38,7 +38,6 @@ jobs:
           SECRET_NAME_2: ${{ secrets.SECRET_NAME_2 }}
           NETWORK_NAME: ${{ secrets.NETWORK_NAME }}
           APP_PORT: ${{ secrets.APP_PORT }}
-          HOST_ALIAS: ${{ secrets.HOST_ALIAS }}
           REDIS_HOST_ALIAS: ${{ secrets.REDIS_HOST_ALIAS }}
           HOST_IP: ${{ secrets.HOST_IP }}
         with:
@@ -51,4 +50,4 @@ jobs:
             docker service ls | grep -q service-upload && docker service rm service-upload || true
             cd $DIR
             docker pull turistikrota/service.upload:$IMAGE_TAG
-            docker service create --name service-upload --network $NETWORK_NAME --secret $SECRET_NAME_1 --secret $SECRET_NAME_2 --env-file .env --host $HOST_ALIAS:$HOST_IP --host $REDIS_HOST_ALIAS:$HOST_IP --publish $APP_PORT:$APP_PORT turistikrota/service.upload:$IMAGE_TAG 
+            docker service create --name service-upload --network $NETWORK_NAME --secret $SECRET_NAME_1 --secret $SECRET_NAME_2 --env-file .env --host $REDIS_HOST_ALIAS:$HOST_IP --publish $APP_PORT:$APP_PORT turistikrota/service.upload:$IMAGE_TAG 
