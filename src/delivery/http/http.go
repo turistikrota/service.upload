@@ -53,15 +53,15 @@ func New(config Config) Server {
 }
 
 func (h Server) Load(router fiber.Router) fiber.Router {
-	router.Use(h.cors(), h.deviceUUID(), h.rateLimit(), h.currentUserAccess(), h.requiredAccess())
-	router.Post("/image", h.isUploadAdminRole(Fields.Image), h.wrapWithTimeout(h.UploadImage, 3*time.Second))
-	router.Post("/pdf", h.isUploadAdminRole(Fields.Pdf), h.wrapWithTimeout(h.UploadPdf))
-	router.Post("/svg", h.isUploadAdminRole(Fields.Svg), h.wrapWithTimeout(h.UploadSvg))
-	router.Post("/md", h.isUploadAdminRole(Fields.Markdown), h.wrapWithTimeout(h.UploadMarkdown))
-	router.Post("/@:userName", h.currentAccount(), h.wrapWithTimeout(h.UploadAvatar, 3*time.Second))
-	router.Post("/business/avatar", h.currentAccount(), h.currentBusiness(config.Roles.Business.Super, config.Roles.Business.UploadAvatar), h.wrapWithTimeout(h.UploadBusinessAvatar, 3*time.Second))
-	router.Post("/business/cover", h.currentAccount(), h.currentBusiness(config.Roles.Business.Super, config.Roles.Business.UploadCover), h.wrapWithTimeout(h.UploadBusinessCover, 3*time.Second))
-	router.Post("/listing", h.currentAccount(), h.currentBusiness(config.Roles.Business.Super, config.Roles.Business.ListingCreate, config.Roles.Business.ListingUpdate), h.wrapWithTimeout(h.UploadListingImage, 3*time.Second))
+	router.Use(h.cors(), h.deviceUUID(), h.currentUserAccess(), h.requiredAccess())
+	router.Post("/image", h.rateLimit(75), h.isUploadAdminRole(Fields.Image), h.wrapWithTimeout(h.UploadImage, 3*time.Second))
+	router.Post("/pdf", h.rateLimit(), h.isUploadAdminRole(Fields.Pdf), h.wrapWithTimeout(h.UploadPdf))
+	router.Post("/svg", h.rateLimit(), h.isUploadAdminRole(Fields.Svg), h.wrapWithTimeout(h.UploadSvg))
+	router.Post("/md", h.rateLimit(), h.isUploadAdminRole(Fields.Markdown), h.wrapWithTimeout(h.UploadMarkdown))
+	router.Post("/@:userName", h.rateLimit(), h.currentAccount(), h.wrapWithTimeout(h.UploadAvatar, 3*time.Second))
+	router.Post("/business/avatar", h.rateLimit(), h.currentAccount(), h.currentBusiness(config.Roles.Business.Super, config.Roles.Business.UploadAvatar), h.wrapWithTimeout(h.UploadBusinessAvatar, 3*time.Second))
+	router.Post("/business/cover", h.rateLimit(), h.currentAccount(), h.currentBusiness(config.Roles.Business.Super, config.Roles.Business.UploadCover), h.wrapWithTimeout(h.UploadBusinessCover, 3*time.Second))
+	router.Post("/listing", h.rateLimit(), h.currentAccount(), h.currentBusiness(config.Roles.Business.Super, config.Roles.Business.ListingCreate, config.Roles.Business.ListingUpdate), h.wrapWithTimeout(h.UploadListingImage, 3*time.Second))
 	return router
 }
 
@@ -127,9 +127,13 @@ func (h Server) cors() fiber.Handler {
 	})
 }
 
-func (h Server) rateLimit() fiber.Handler {
+func (h Server) rateLimit(limit ...int) fiber.Handler {
+	max := 15
+	if len(limit) > 0 {
+		max = limit[0]
+	}
 	return limiter.New(limiter.Config{
-		Max:        15,
+		Max:        max,
 		Expiration: 3 * time.Minute,
 	})
 }
