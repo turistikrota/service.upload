@@ -51,12 +51,13 @@ func main() {
 		Project:     cnf.TokenSrv.Project,
 	})
 	delivery := delivery.New(delivery.Config{
-		App:        app,
-		Config:     cnf,
-		I18n:       i18n,
-		Validator:  valid,
-		SessionSrv: session.Service,
-		TokenSrv:   tknSrv,
+		App:         app,
+		Config:      cnf,
+		I18n:        i18n,
+		Validator:   valid,
+		SessionSrv:  session.Service,
+		TokenSrv:    tknSrv,
+		EventEngine: eventEngine,
 	})
 	delivery.Load()
 }

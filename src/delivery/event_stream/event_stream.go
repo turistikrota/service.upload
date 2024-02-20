@@ -27,5 +27,6 @@ func New(config Config) Server {
 }
 
 func (s Server) Load() {
-	// s.engine.Subscribe(s.Topics.Created, s.ListenEmptyCreated)
+	s.engine.Subscribe(s.Topics.Upload.UploadPDF, s.ListenUploadPdf)
+	s.engine.Subscribe(s.Topics.Upload.UploadImage, s.ListenUploadImage)
 }

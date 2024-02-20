@@ -53,12 +53,12 @@ type Session struct {
 }
 
 type Topics struct {
-	Empty EmptyTopics
+	Upload UploadTopics
 }
 
-type EmptyTopics struct {
-	Created string `env:"STREAMING_TOPIC_EXAMPLE_CREATED"`
-	Updated string `env:"STREAMING_TOPIC_EXAMPLE_UPDATED"`
+type UploadTopics struct {
+	UploadPDF   string `env:"STREAMING_TOPIC_UPLOAD_PDF"`
+	UploadImage string `env:"STREAMING_TOPIC_UPLOAD_IMAGE"`
 }
 
 type Nats struct {

@@ -3,12 +3,14 @@ package delivery
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/mixarchitecture/i18np"
+	"github.com/mixarchitecture/microp/events"
 	sharedHttp "github.com/mixarchitecture/microp/server/http"
 	"github.com/mixarchitecture/microp/validator"
 	"github.com/turistikrota/service.shared/auth/session"
 	"github.com/turistikrota/service.shared/auth/token"
 	"github.com/turistikrota/service.upload/src/app"
 	"github.com/turistikrota/service.upload/src/config"
+	"github.com/turistikrota/service.upload/src/delivery/event_stream"
 	"github.com/turistikrota/service.upload/src/delivery/http"
 )
 
@@ -17,36 +19,39 @@ type Delivery interface {
 }
 
 type delivery struct {
-	app        app.Application
-	config     config.App
-	i18n       *i18np.I18n
-	validator  *validator.Validator
-	sessionSrv session.Service
-	tknSrv     token.Service
+	app         app.Application
+	config      config.App
+	i18n        *i18np.I18n
+	validator   *validator.Validator
+	eventEngine events.Engine
+	sessionSrv  session.Service
+	tknSrv      token.Service
 }
 
 type Config struct {
-	App        app.Application
-	Config     config.App
-	I18n       *i18np.I18n
-	Validator  *validator.Validator
-	SessionSrv session.Service
-	TokenSrv   token.Service
+	App         app.Application
+	Config      config.App
+	I18n        *i18np.I18n
+	Validator   *validator.Validator
+	EventEngine events.Engine
+	SessionSrv  session.Service
+	TokenSrv    token.Service
 }
 
 func New(config Config) Delivery {
 	return &delivery{
-		app:        config.App,
-		config:     config.Config,
-		i18n:       config.I18n,
-		validator:  config.Validator,
-		sessionSrv: config.SessionSrv,
-		tknSrv:     config.TokenSrv,
+		app:         config.App,
+		config:      config.Config,
+		i18n:        config.I18n,
+		validator:   config.Validator,
+		eventEngine: config.EventEngine,
+		sessionSrv:  config.SessionSrv,
+		tknSrv:      config.TokenSrv,
 	}
 }
 
 func (d *delivery) Load() {
-	d.loadHTTP()
+	d.loadEventStream().loadHTTP()
 }
 
 func (d *delivery) loadHTTP() *delivery {
@@ -66,5 +71,18 @@ func (d *delivery) loadHTTP() *delivery {
 			}).Load(router)
 		},
 	})
+	return d
+}
+
+func (d *delivery) loadEventStream() *delivery {
+	eventStream := event_stream.New(event_stream.Config{
+		App:    d.app,
+		Engine: d.eventEngine,
+	})
+	err := d.eventEngine.Open()
+	if err != nil {
+		panic(err)
+	}
+	eventStream.Load()
 	return d
 }

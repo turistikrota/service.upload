@@ -10,13 +10,13 @@ import (
 )
 
 type UploadImageCommand struct {
-	RandomName  bool
-	Slugify     bool
-	FileName    string
-	Dir         string
-	Content     *multipart.FileHeader
-	IsAdmin     bool
-	MinifyLevel cdn.MinifyLevel
+	RandomName  bool                  `json:"randomName"`
+	Slugify     bool                  `json:"slugify"`
+	FileName    string                `json:"fileName"`
+	Dir         string                `json:"dir"`
+	Content     *multipart.FileHeader `json:"content"`
+	IsAdmin     bool                  `json:"-"`
+	MinifyLevel cdn.MinifyLevel       `json:"minifyLevel"`
 }
 
 type UploadImageResult struct {
