@@ -10,11 +10,12 @@ import (
 )
 
 type UploadPdfCommand struct {
-	RandomName bool
-	FileName   string
-	Dir        string
-	Content    *multipart.FileHeader
-	IsAdmin    bool
+	RandomName bool                  `json:"randomName"`
+	Slugify    bool                  `json:"slugify"`
+	FileName   string                `json:"fileName"`
+	Dir        string                `json:"dir"`
+	Content    *multipart.FileHeader `json:"content"`
+	IsAdmin    bool                  `json:"-"`
 }
 
 type UploadPdfResult struct {
@@ -46,7 +47,7 @@ func NewUploadPdfHandler(config UploadPdfHandlerConfig) UploadPdfHandler {
 
 func (h uploadPdfHandler) Handle(ctx context.Context, command UploadPdfCommand) (*UploadPdfResult, *i18np.Error) {
 	dir := h.factory.GenerateDirName(command.Dir, command.IsAdmin, "pdf")
-	name := h.factory.GenerateName(command.FileName, command.RandomName, false)
+	name := h.factory.GenerateName(command.FileName, command.RandomName, command.Slugify)
 	bytes, err := h.factory.New(cdn.ValidateConfig{
 		Content: command.Content,
 		Accept:  []string{"application/pdf"},
